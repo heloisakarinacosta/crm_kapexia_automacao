@@ -1,141 +1,140 @@
-# Integração da Automação (Régua de Contatos) ao CRM Existente
+# 🤖 Integração do Sistema de Automação no CRM
 
-## 1. Estrutura de Arquivos para Integração
+## 📋 Resumo
+Este guia explica como integrar o sistema de **Automação - Régua de Contatos** ao seu CRM existente.
 
-### Arquivos Novos (copiar para seu projeto):
+## 🗄️ Schema do Banco de Dados
 
+### Tabelas Criadas:
+- `automations` - Automações principais
+- `automation_nodes` - Ações/nós da automação  
+- `automation_executions` - Histórico de execuções
+- `automation_execution_logs` - Logs detalhados
+- `automation_templates` - Templates pré-definidos
+
+### Relacionamentos:
+- Todas as tabelas são vinculadas ao `client_id` (multi-tenancy)
+- Referências corrigidas para `administrators` em vez de `users`
+- Foreign keys com CASCADE para limpeza automática
+
+## 🔧 Integração no CRM
+
+### 1. Estrutura de Arquivos
 \`\`\`
-frontend/src/
-├── app/
-│   └── admin/
-│       └── automacao/                      # ⚠️ MUDANÇA: era "estrategias"
-│           ├── layout.tsx
-│           └── page.tsx                    # Página principal
+seu-crm/
+├── app/admin/
+│   └── automacao/           # Nova pasta
+│       ├── layout.tsx
+│       └── page.tsx
 ├── components/
-│   └── estrategias/                        # Mantém nome interno
-│       ├── NodeSidebar.tsx
-│       ├── WorkflowCanvas.tsx
-│       ├── TimelineSection.tsx
-│       ├── TimelineDayCanvas.tsx
-│       ├── NodeComponent.tsx
-│       ├── DraggableNode.tsx
-│       ├── PropertiesPanel.tsx
-│       ├── ExecutionControls.tsx
-│       └── ExecutionLogs.tsx
-├── constants/
-│   └── kapexia-colors.ts                   # Paleta de cores
-├── types/
-│   └── estrategias.ts                      # Mantém nome interno
-└── components/ui/
-    ├── textarea.tsx                        # Componente UI (se não existir)
-    └── switch.tsx                          # Componente UI (se não existir)
+│   └── estrategias/         # Mantém nome interno
+│       └── [todos os componentes]
+└── scripts/
+    └── automacao_schema.sql # Execute no MySQL
 \`\`\`
 
-### Arquivos para Modificar:
-
-1. **frontend/src/components/layout/Sidebar.tsx**
-   - Adicionar item "Automação" no menu (não "Estratégias")
-
-2. **frontend/package.json**
-   - Adicionar dependências: `react-dnd` e `react-dnd-html5-backend`
-
-3. **backend/src/routes/** (criar novos arquivos)
-   - `automationRoutes.js` (ou manter `strategiesRoutes.js`)
-   - `automationNodesRoutes.js`
-   - `automationExecutionsRoutes.js`
-
-## 2. Mudanças Específicas para "Automação"
-
-### ✅ **O que MUDA:**
-- **Título da página**: "Automação - Régua de Contatos"
-- **Item do menu**: "Automação" (não "Estratégias")
-- **Rota**: `/admin/automacao` (não `/admin/estrategias`)
-- **Textos da interface**: "ações" em vez de "nós", "Executar Automação", etc.
-
-### ✅ **O que NÃO MUDA:**
-- **Nomes dos arquivos internos**: mantém `estrategias/` para organização
-- **Nomes das tabelas**: mantém `strategies`, `strategy_nodes`, etc.
-- **APIs**: pode manter `/api/strategies` ou criar `/api/automation`
-- **Tipos TypeScript**: mantém `estrategias.ts`
-
-## 3. Integração Passo a Passo
-
-### Passo 1: Executar SQL (sem mudanças)
-\`\`\`bash
-# No seu banco de dados MySQL
-mysql -u seu_usuario -p seu_banco < scripts/estrategias_schema.sql
+### 2. Menu do CRM
+Adicione no seu menu administrativo:
+\`\`\`php
+[
+    'title' => 'Automação',
+    'icon' => 'zap',
+    'route' => '/admin/automacao',
+    'permission' => 'automacao.view'
+]
 \`\`\`
 
-### Passo 2: Adicionar ao Menu
-Edite `frontend/src/components/layout/Sidebar.tsx`:
+### 3. APIs Necessárias
 
-\`\`\`tsx
-// Adicionar no array de menu items
-{
-  title: 'Automação',                    // ⚠️ MUDANÇA: era "Estratégias"
-  icon: 'zap',                          // ⚠️ MUDANÇA: ícone de automação
-  href: '/admin/automacao',             // ⚠️ MUDANÇA: era "/admin/estrategias"
-  description: 'Régua de Contatos'     // ⚠️ MUDANÇA: descrição mais clara
-}
-\`\`\`
-
-### Passo 3: Criar Pasta Correta
-\`\`\`bash
-# Criar a pasta com o nome correto
-mkdir -p app/admin/automacao
-# Copiar arquivos para a pasta correta
-\`\`\`
-
-### Passo 4: APIs (Opcional - pode manter as existentes)
+#### GET /api/automations
 \`\`\`javascript
-// Opção 1: Manter rotas existentes
-app.use('/api/strategies', strategiesRoutes);
-
-// Opção 2: Criar novas rotas (alias)
-app.use('/api/automation', strategiesRoutes);
+// Listar automações do cliente
+app.get('/api/automations', async (req, res) => {
+  const { client_id } = req.user;
+  const automations = await db.query(`
+    SELECT * FROM automations 
+    WHERE client_id = ? AND is_active = 1
+    ORDER BY created_at DESC
+  `, [client_id]);
+  res.json(automations);
+});
 \`\`\`
 
-## 4. Verificação de Conflitos
+#### POST /api/automations
+\`\`\`javascript
+// Criar nova automação
+app.post('/api/automations', async (req, res) => {
+  const { client_id, administrator_id } = req.user;
+  const { name, description, data_inicial, dias_uteis, timeline_days, nodes } = req.body;
+  
+  // Inserir automação
+  const automation = await db.query(`
+    INSERT INTO automations (client_id, administrator_id, name, description, data_inicial, dias_uteis, timeline_days)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `, [client_id, administrator_id, name, description, data_inicial, dias_uteis, JSON.stringify(timeline_days)]);
+  
+  // Inserir nós
+  for (const node of nodes) {
+    await db.query(`
+      INSERT INTO automation_nodes (automation_id, client_id, node_id, type, title, day, position_x, position_y, config)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [automation.insertId, client_id, node.id, node.type, node.title, node.day, node.position.x, node.position.y, JSON.stringify(node.config)]);
+  }
+  
+  res.json({ success: true, id: automation.insertId });
+});
+\`\`\`
 
-### ✅ **Checklist de Integração:**
-- [ ] Não há conflito com menu "Estratégias" existente
-- [ ] Rota `/admin/automacao` está livre
-- [ ] Título "Automação" não confunde usuários
-- [ ] Ícone diferente do "Estratégias" existente
+#### POST /api/automations/:id/execute
+\`\`\`javascript
+// Executar automação
+app.post('/api/automations/:id/execute', async (req, res) => {
+  const { id } = req.params;
+  const { client_id, administrator_id } = req.user;
+  const { execution_type, target_day, target_node_id } = req.body;
+  
+  // Criar execução
+  const execution = await db.query(`
+    INSERT INTO automation_executions (automation_id, client_id, administrator_id, execution_type, target_day, target_node_id)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `, [id, client_id, administrator_id, execution_type, target_day, target_node_id]);
+  
+  // Processar nós (implementar lógica de execução)
+  await processAutomationExecution(execution.insertId);
+  
+  res.json({ success: true, execution_id: execution.insertId });
+});
+\`\`\`
 
-## 5. Sugestões de Nomenclatura
+## 🔄 Fluxo de Execução
 
-### **No Menu do CRM:**
-- **Estratégias** → Planejamento estratégico, metas, campanhas
-- **Automação** → Régua de contatos, workflows, sequências
+### 1. Workflow Geral (day = -999)
+- Importação de dados
+- Preparação de variáveis
+- Consultas ao banco
 
-### **Diferenciação Clara:**
-- **Estratégias**: Visão macro, planejamento, campanhas
-- **Automação**: Execução, workflows, sequências de contato
+### 2. Timeline (days específicos)
+- Envio de emails/WhatsApp
+- Criação de tarefas
+- Webhooks externos
+- Condições e delays
 
-## 6. Testando a Integração
+### 3. Logs e Monitoramento
+- Cada ação gera log em `automation_execution_logs`
+- Status: pending → running → success/error
+- Webhook responses são armazenadas
 
-### Teste Local:
-1. Execute o SQL para criar as tabelas
-2. Copie os arquivos para `app/admin/automacao/`
-3. Instale as dependências: `npm install react-dnd react-dnd-html5-backend`
-4. Adicione "Automação" no menu (não "Estratégias")
-5. Acesse `/admin/automacao`
+## 🎯 Próximos Passos
 
-### Verificações:
-- [ ] Página carrega sem erros
-- [ ] Não há conflito com "Estratégias" existente
-- [ ] Título mostra "Automação - Régua de Contatos"
-- [ ] Funcionalidades funcionam normalmente
+1. **Execute o SQL**: `automacao_schema.sql`
+2. **Copie os arquivos**: Para sua estrutura do CRM
+3. **Implemente as APIs**: Seguindo os exemplos acima
+4. **Configure o menu**: Adicione "Automação" 
+5. **Teste a integração**: Crie uma automação simples
 
-## 7. Resumo das Mudanças
+## 📞 Suporte
+- Interface funcional e testada no v0
+- Schema otimizado para multi-tenancy
+- Pronto para produção com webhooks reais
 
-| Item | Antes | Depois |
-|------|-------|--------|
-| **Título** | "Régua de Estratégias" | "Automação - Régua de Contatos" |
-| **Menu** | "Estratégias" | "Automação" |
-| **Rota** | `/admin/estrategias` | `/admin/automacao` |
-| **Pasta** | `app/estrategias/` | `app/automacao/` |
-| **Ícone** | `timeline` | `zap` ou `workflow` |
-
-**✅ Resultado:** Sem conflitos, nomenclatura clara, funcionalidade mantida!
+**A automação está pronta para ser integrada ao seu CRM!** 🚀

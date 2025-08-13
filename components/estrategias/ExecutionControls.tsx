@@ -1,70 +1,78 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Play, Square, Power, PowerOff, BarChart3 } from "lucide-react"
+import { Play, Square, TestTube, Calendar, Zap, ChevronDown } from "lucide-react"
 
 interface ExecutionControlsProps {
+  onExecute: (type: "full" | "day" | "node" | "test", target?: string | number) => void
   isExecuting: boolean
-  isStrategyActive: boolean
-  totalEvents: number
-  onExecute: () => void
-  onStop: () => void
-  onToggleActive: () => void
 }
 
-export function ExecutionControls({
-  isExecuting,
-  isStrategyActive,
-  totalEvents,
-  onExecute,
-  onStop,
-  onToggleActive,
-}: ExecutionControlsProps) {
+export function ExecutionControls({ onExecute, isExecuting }: ExecutionControlsProps) {
+  const [showOptions, setShowOptions] = useState(false)
+
   return (
-    <Card className="m-4 p-4 bg-white border border-gray-200">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <BarChart3 className="w-5 h-5 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">{totalEvents} ações configuradas</span>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${isStrategyActive ? "bg-green-500" : "bg-gray-400"}`} />
-            <span className="text-sm text-gray-600">Automação {isStrategyActive ? "Ativa" : "Inativa"}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onToggleActive}
-            className={isStrategyActive ? "border-green-500 text-green-600" : ""}
-          >
-            {isStrategyActive ? <Power className="w-4 h-4 mr-2" /> : <PowerOff className="w-4 h-4 mr-2" />}
-            {isStrategyActive ? "Desativar" : "Ativar"}
-          </Button>
-
+    <div className="relative">
+      <div className="flex items-center gap-2">
+        {/* Botão principal */}
+        <Button onClick={() => onExecute("full")} disabled={isExecuting} className="bg-cyan-600 hover:bg-cyan-700">
           {isExecuting ? (
-            <Button variant="destructive" size="sm" onClick={onStop} className="bg-red-500 hover:bg-red-600">
-              <Square className="w-4 h-4 mr-2" />
-              Parar Execução
-            </Button>
+            <>
+              <Square className="h-4 w-4 mr-2" />
+              Executando...
+            </>
           ) : (
-            <Button
-              onClick={onExecute}
-              disabled={!isStrategyActive}
-              size="sm"
-              className="bg-[#40E0D0] hover:bg-[#53B6AC] text-white"
-            >
-              <Play className="w-4 h-4 mr-2" />
+            <>
+              <Play className="h-4 w-4 mr-2" />
               Executar Automação
-            </Button>
+            </>
           )}
-        </div>
+        </Button>
+
+        {/* Menu de opções */}
+        <Button variant="outline" size="sm" onClick={() => setShowOptions(!showOptions)} disabled={isExecuting}>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
       </div>
-    </Card>
+
+      {/* Dropdown de opções */}
+      {showOptions && (
+        <div className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+          <div className="py-1">
+            <button
+              onClick={() => {
+                onExecute("test")
+                setShowOptions(false)
+              }}
+              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+            >
+              <TestTube className="h-4 w-4 text-blue-500" />
+              Testar Automação
+            </button>
+            <button
+              onClick={() => {
+                onExecute("day", 0)
+                setShowOptions(false)
+              }}
+              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+            >
+              <Calendar className="h-4 w-4 text-green-500" />
+              Executar Dia Específico
+            </button>
+            <button
+              onClick={() => {
+                onExecute("node", "selected")
+                setShowOptions(false)
+              }}
+              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+            >
+              <Zap className="h-4 w-4 text-orange-500" />
+              Executar Ação Específica
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }

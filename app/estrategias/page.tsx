@@ -70,7 +70,7 @@ const exemploConfigurado = {
   ],
 }
 
-export default function EstrategiasPage() {
+export default function AutomacaoPage() {
   const [dataInicial, setDataInicial] = useState(exemploConfigurado.dataInicial)
   const [diasUteis, setDiasUteis] = useState(exemploConfigurado.diasUteis)
   const [timelineDays, setTimelineDays] = useState(exemploConfigurado.timelineDays)
@@ -231,7 +231,7 @@ export default function EstrategiasPage() {
       <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <h1 className="text-2xl font-light text-gray-800">Régua de Estratégias</h1>
+            <h1 className="text-2xl font-light text-gray-800">Automação - Régua de Contatos</h1>
 
             <div className="flex items-center space-x-2">
               <Calendar className="w-4 h-4 text-gray-500" />
@@ -278,7 +278,7 @@ export default function EstrategiasPage() {
 
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
-              Propriedades
+              Configurações
             </Button>
           </div>
         </div>
@@ -301,7 +301,7 @@ export default function EstrategiasPage() {
                 {item.day}
               </div>
               <div className="text-xs opacity-80">{item.date}</div>
-              <div className="text-xs mt-1 opacity-60">{item.nodeCount} nós</div>
+              <div className="text-xs mt-1 opacity-60">{item.nodeCount} ações</div>
             </Card>
           ))}
         </div>
@@ -319,7 +319,7 @@ export default function EstrategiasPage() {
             <div className="h-full bg-white">
               <div className="p-4 border-b border-gray-200 bg-gray-50">
                 <h3 className="text-lg font-medium text-gray-700">Workflow Geral</h3>
-                <p className="text-sm text-gray-500">Arraste nós aqui para criar o fluxo principal</p>
+                <p className="text-sm text-gray-500">Arraste componentes aqui para criar o fluxo principal</p>
               </div>
               <WorkflowCanvas
                 nodes={workflowNodes}

@@ -1,7 +1,7 @@
 const OpenAI = require("openai")
 const db = require("../config/db")
 
-class StrategyAIService {
+class AutomationAIService {
   constructor() {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -558,4 +558,4 @@ Posso compartilhar esses insights com você?
   }
 }
 
-module.exports = new StrategyAIService()
+module.exports = new AutomationAIService()

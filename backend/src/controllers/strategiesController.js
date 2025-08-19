@@ -1,6 +1,6 @@
 const db = require("../config/db")
 
-class StrategiesController {
+class AutomationController {
   // Buscar todas as estratégias do cliente
   async getStrategies(req, res) {
     try {
@@ -138,4 +138,4 @@ class StrategiesController {
   }
 }
 
-module.exports = new StrategiesController()
+module.exports = new AutomationController()

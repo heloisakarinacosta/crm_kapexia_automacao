@@ -1,0 +1,244 @@
+├── README.md
+├── backend
+│   ├── Dockerfile
+│   ├── backend.log
+│   ├── db
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── app.js
+│   │   ├── app.js.backup
+│   │   ├── config
+│   │   │   └── db.js
+│   │   ├── controllers
+│   │   │   ├── analyticsController.js
+│   │   │   ├── authController.js
+│   │   │   ├── chartConfigController.js
+│   │   │   ├── chartGroupController.js
+│   │   │   ├── clientController.js
+│   │   │   ├── contatoController.js
+│   │   │   ├── dashboardCardController.js
+│   │   │   ├── databaseConfigController.js
+│   │   │   ├── drillDownController.js
+│   │   │   ├── leadController.js
+│   │   │   ├── openaiController.js
+│   │   │   ├── ragController.js
+│   │   │   ├── whatsappChatController.js
+│   │   │   ├── whatsappInstanceController.js
+│   │   │   ├── whatsappInstanceController.js.backup
+│   │   │   ├── whatsappMessageController.js
+│   │   │   ├── whatsappUserInstanceController.js
+│   │   │   └── whatsappWebhookController.js
+│   │   ├── db
+│   │   │   ├── add_group_id_to_drill_down.sql
+│   │   │   ├── add_is_drilldown_to_chart_groups.sql
+│   │   │   ├── correcoes_whatsapp_schema.sql
+│   │   │   ├── dashboard_schema.sql
+│   │   │   ├── drill_down_schema_corrigido.sql
+│   │   │   ├── mvp2_schema.sql
+│   │   │   ├── rag_schema.sql
+│   │   │   ├── seed_test_data.sql
+│   │   │   └── whatsapp_schema.sql
+│   │   ├── index.js
+│   │   ├── middleware
+│   │   │   ├── adminMiddleware.js
+│   │   │   ├── authMiddleware.js
+│   │   │   └── debugAuthMiddleware.js
+│   │   ├── models
+│   │   │   ├── chartConfigModel.js
+│   │   │   ├── chartGroupModel.js
+│   │   │   ├── clientModel.js
+│   │   │   ├── contatoModel.js
+│   │   │   ├── dashboardCardConfigModel.js
+│   │   │   ├── databaseConfigModel.js
+│   │   │   ├── leadModel.js
+│   │   │   ├── openaiConfigModel.js
+│   │   │   ├── ragDocumentModel.js
+│   │   │   ├── ragEmbeddingModel.js
+│   │   │   ├── userModel.js
+│   │   │   ├── whatsappChatModel.js
+│   │   │   ├── whatsappInstanceModel.js
+│   │   │   ├── whatsappMessageModel.js
+│   │   │   └── whatsappUserInstanceModel.js
+│   │   ├── routes
+│   │   │   ├── analyticsRoutes.js
+│   │   │   ├── authRoutes.js
+│   │   │   ├── chartConfigRoutes.js
+│   │   │   ├── chartGroupRoutes.js
+│   │   │   ├── clientRoutes.js
+│   │   │   ├── contatoRoutes.js
+│   │   │   ├── dashboardRoutes.js
+│   │   │   ├── databaseConfigRoutes.js
+│   │   │   ├── drillDownRoutes.js
+│   │   │   ├── leadRoutes.js
+│   │   │   ├── openaiRoutes.js
+│   │   │   ├── ragRoutes.js
+│   │   │   ├── userRoutes.js
+│   │   │   ├── whatsappChatRoutes.js
+│   │   │   ├── whatsappInstanceRoutes.js
+│   │   │   ├── whatsappMessageRoutes.js
+│   │   │   ├── whatsappRoutes.js
+│   │   │   ├── whatsappUserInstanceRoutes.js
+│   │   │   └── whatsappWebhookRoutes.js
+│   │   └── services
+│   │       ├── authService.js
+│   │       ├── drillDownService.js
+│   │       ├── openaiService.js
+│   │       └── whatsapp_auth_service.js
+│   └── {src
+│       ├── controllers}
+│       ├── models}
+│       └── routes}
+├── config
+│   └── mariadb
+│       └── init.sql
+├── database
+│   └── correcoes_whatsapp_schema.sql
+├── docker-compose.yml
+├── docs
+│   ├── Plano de Implementação do MVP2 - CRM Kapexia.md
+│   ├── SETUP_LOCAL_MVP1.md
+│   ├── WHATSAPP_MODULE_DOCUMENTATION.md
+│   ├── dashboard_mockup.png
+│   ├── dashboard_structure.md
+│   ├── implementacao_mdi_completa.md
+│   ├── indicator_cards_design.md
+│   ├── install_whatsapp_module.sh
+│   ├── instrucoes_tela_dashboards.md
+│   ├── integration_guide.md
+│   └── todo.md
+├── fix_chart_positions.sql
+├── frontend
+│   ├── Dockerfile
+│   ├── ecosystem.config.js
+│   ├── eslint.config.mjs
+│   ├── next-env.d.ts
+│   ├── next.config.js
+│   ├── next.config.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.cjs
+│   ├── postcss.config.js
+│   ├── public
+│   │   └── images
+│   │       ├── logo-1024.png
+│   │       ├── logo-120.png
+│   │       ├── logo7-fundoescuro-120.png
+│   │       ├── logo9-fundo_escuro.png
+│   │       └── logo_login.png
+│   ├── src
+│   │   ├── app
+│   │   │   ├── admin
+│   │   │   │   ├── analytics
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   ├── page_backup.tsx
+│   │   │   │   │   ├── page_old.tsx
+│   │   │   │   │   ├── test-pie
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── test-pie.tsx
+│   │   │   │   ├── chat
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── leads
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── settings
+│   │   │   │   │   ├── analytics
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── chart-configs
+│   │   │   │   │   │   ├── page.tsx
+│   │   │   │   │   │   └── page_backup.tsx
+│   │   │   │   │   ├── clients
+│   │   │   │   │   │   ├── [id]
+│   │   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   │   ├── new
+│   │   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── dashboard
+│   │   │   │   │   │   ├── page.tsx
+│   │   │   │   │   │   └── page.tsx.backup
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── whatsapp
+│   │   │   │   │       └── page.tsx
+│   │   │   │   └── whatsapp
+│   │   │   │       └── page.tsx
+│   │   │   ├── analytics
+│   │   │   │   └── page.tsx
+│   │   │   ├── api
+│   │   │   │   ├── analytics
+│   │   │   │   │   ├── chart
+│   │   │   │   │   │   └── [position]
+│   │   │   │   │   │       └── route.js
+│   │   │   │   │   └── dashboard
+│   │   │   │   │       └── route.js
+│   │   │   │   └── clients
+│   │   │   │       ├── [id]
+│   │   │   │       │   └── route.js
+│   │   │   │       └── route.js
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   ├── login
+│   │   │   │   └── admin
+│   │   │   │       └── login
+│   │   │   │           └── page.tsx
+│   │   │   └── page.tsx
+│   │   ├── components
+│   │   │   ├── analytics
+│   │   │   │   ├── AnalyticsFilters.tsx
+│   │   │   │   ├── BarChartComponent.tsx
+│   │   │   │   ├── LineChartComponent.tsx
+│   │   │   │   └── PieChartComponent.tsx
+│   │   │   ├── charts
+│   │   │   │   ├── DrillDownModal.tsx
+│   │   │   │   └── EnhancedChart.tsx
+│   │   │   ├── chat
+│   │   │   │   ├── ChatInput.tsx
+│   │   │   │   ├── ChatInterface.tsx
+│   │   │   │   ├── ChatMessage.tsx
+│   │   │   │   └── ChatSuggestion.tsx
+│   │   │   ├── dashboard
+│   │   │   │   ├── IndicatorCard.tsx
+│   │   │   │   └── IndicatorCardsSection.tsx
+│   │   │   ├── layout
+│   │   │   │   ├── DashboardLayout.tsx
+│   │   │   │   └── Sidebar.tsx
+│   │   │   ├── ui
+│   │   │   │   ├── MDIIcon.tsx
+│   │   │   │   ├── button.js
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── calendar.js
+│   │   │   │   ├── calendar.tsx
+│   │   │   │   ├── card.js
+│   │   │   │   ├── card.tsx
+│   │   │   │   ├── popover.js
+│   │   │   │   ├── popover.tsx
+│   │   │   │   ├── select.js
+│   │   │   │   ├── select.tsx
+│   │   │   │   ├── skeleton.js
+│   │   │   │   └── skeleton.tsx
+│   │   │   └── whatsapp
+│   │   │       ├── WhatsAppChatInterface.tsx
+│   │   │       ├── WhatsAppChatList.tsx
+│   │   │       ├── WhatsAppInstanceSelector.tsx
+│   │   │       ├── WhatsAppMediaUpload.tsx
+│   │   │       ├── WhatsAppMessageBubble.tsx
+│   │   │       └── WhatsAppStats.tsx
+│   │   ├── constants
+│   │   │   └── colors.ts
+│   │   ├── hooks
+│   │   │   ├── useDrillDown.ts
+│   │   │   └── useIcon.ts
+│   │   ├── services
+│   │   │   └── drillDownService.ts
+│   │   ├── styles
+│   │   │   └── iconTheme.ts
+│   │   ├── types
+│   │   │   └── ui.ts
+│   │   └── utils
+│   │       └── iconMap.ts
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
+├── hash_password.js
+├── package-lock.json
+├── package.json
+├── plan_update.json
